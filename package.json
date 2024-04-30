@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "impact-framework-vscode.helloWorld",
-        "title": "Hello World"
+        "command": "impact-framework-vscode.createManifest",
+        "title": "Create Manifest (Impact Framework)"
       }
     ]
   },
