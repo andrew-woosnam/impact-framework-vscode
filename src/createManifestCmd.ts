@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 
-export async function tryCreateManifestYaml() {
+export async function createManifestYamlAsync() {
   const selectedFolders = await vscode.window.showOpenDialog({
     canSelectFolders: true,
     canSelectFiles: false,

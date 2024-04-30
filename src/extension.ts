@@ -1,11 +1,11 @@
 import * as vscode from "vscode";
-import { tryCreateManifestYaml } from "./createManifestYaml";
+import { createManifestYamlAsync } from "./createManifestCmd";
 
 export function activate(context: vscode.ExtensionContext) {
   let createManifestCmd = vscode.commands.registerCommand(
     "impact-framework-vscode.createManifest",
     () => {
-      tryCreateManifestYaml();
+      createManifestYamlAsync();
     }
   );
 
