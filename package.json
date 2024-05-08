@@ -17,6 +17,19 @@
         "command": "impact-framework-vscode.createManifest",
         "title": "Create Manifest (Impact Framework)"
       }
+    ],
+    "capabilities": {
+      "hoverProvider": true
+    },
+    "languages": [
+      {
+        "id": "yaml",
+        "extensions": [
+          ".yaml",
+          ".yml"
+        ],
+        "configuration": "./yaml-language-configuration.json"
+      }
     ]
   },
   "scripts": {
