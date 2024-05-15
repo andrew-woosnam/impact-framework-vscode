@@ -18,30 +18,24 @@ export function activate(context: vscode.ExtensionContext) {
     provideHover(document, position, token) {
       const range = document.getWordRangeAtPosition(position);
       const word = document.getText(range);
-
-      if (word === "initialize") {
-        try {
-          // Get the extension's directory path
-          const extensionPath = context.extensionPath;
-
-          // Read the content from initialize.md (use the correct path)
-          const markdownFilePath = path.join(
-            extensionPath,
-            "static/descriptions/initialize.md"
-          );
-          const markdownContent = fs.readFileSync(markdownFilePath, "utf8");
-
-          // Construct a custom hover message
-          const markdown = new vscode.MarkdownString(markdownContent);
-          markdown.isTrusted = true;
-
-          return new vscode.Hover(markdown);
-        } catch (error) {
-          console.error("Error reading or processing initialize.md:", error);
-        }
-      }
+      return tryGetInfoFromWord(word);
     },
   });
+
+  function tryGetInfoFromWord(word: string) {
+    try {
+      const extensionPath = context.extensionPath;
+      const markdownFilePath = path.join(
+        extensionPath,
+        `static/descriptions/${word}.md`
+      );
+      const markdownContent = fs.readFileSync(markdownFilePath, "utf8");
+      const markdown = new vscode.MarkdownString(markdownContent);
+      markdown.isTrusted = true;
+
+      return new vscode.Hover(markdown);
+    } catch (_) {}
+  }
 }
 
 export function deactivate() {}

@@ -1,6 +1,6 @@
 **Initialize**
 
-The initialize section is where you define which plugins will be used in your manifest file and provide the global configuration for them. Below is sample for initialization:
+The initialize section is where you define which plugins will be used in your manifest file and provide the global configuration for them. Impact Framework uses the initialize section to instantiate each plugin. A plugin cannot be invoked elsewhere in the manifest file unless it is included in this section. Below is sample for initialization:
 
 ```yaml
 initialize:
