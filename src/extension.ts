@@ -17,8 +17,21 @@ export function activate(context: vscode.ExtensionContext) {
   vscode.languages.registerHoverProvider("yaml", {
     provideHover(document, position, token) {
       const range = document.getWordRangeAtPosition(position);
-      const word = document.getText(range);
-      return tryGetInfoFromWord(word);
+      if (range === null || range === undefined) {
+        return null;
+      }
+
+      // Extend the range by one character to check for ":"
+      const extendedRange = new vscode.Range(
+        range.start,
+        range.end.translate(0, 1)
+      );
+      const extendedWord = document.getText(extendedRange);
+      if (extendedWord.endsWith(":")) {
+        return tryGetInfoFromWord(extendedWord.slice(0, -1));
+      }
+
+      return null;
     },
   });
 
