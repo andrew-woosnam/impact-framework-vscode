@@ -1,5 +1,5 @@
 {
-  "Manifest Template": {
+  "IF manifest template": {
     "prefix": ["ifmanifest", "manifest"],
     "body": [
       "name: $1",
@@ -21,9 +21,9 @@
       "        - timestamp: $7",
       "          duration: $8"
     ],
-    "description": "Creates a new manifest template"
+    "description": "Impact Framework manifest template."
   },
-  "Manifest Initialize Section": {
+  "IF manifest initialize section": {
     "prefix": "initialize",
     "body": [
       "initialize:",
@@ -35,7 +35,7 @@
     ],
     "description": "Impact Framework manifest \"Initialize\" section template."
   },
-  "Manifest Child Node": {
+  "IF manifest child node": {
     "prefix": "child",
     "body": [
       "child:",
