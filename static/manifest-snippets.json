@@ -1,0 +1,14 @@
+{
+  "Manifest Initialize Section": {
+    "prefix": "initialize",
+    "body": [
+      "initialize:",
+      "  plugins:",
+      "    ${1:<PLUGIN-NAME-HERE>}:",
+      "      method: ${2:<METHOD-HERE>}",
+      "      path: ${3:<PATH-HERE>}",
+      "  outputs:"
+    ],
+    "description": "Impact Framework manifest \"Initialize\" section template."
+  }
+}

@@ -7,6 +7,7 @@
     "vscode": "^1.88.0"
   },
   "categories": [
+    "Snippets",
     "Other"
   ],
   "activationEvents": [],
@@ -29,6 +30,12 @@
           ".yml"
         ],
         "configuration": "./yaml-language-configuration.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "yaml",
+        "path": "./static/manifest-snippets.json"
       }
     ]
   },
