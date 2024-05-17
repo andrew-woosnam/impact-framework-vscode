@@ -10,5 +10,18 @@
       "  outputs:"
     ],
     "description": "Impact Framework manifest \"Initialize\" section template."
+  },
+  "Manifest Child Node": {
+    "prefix": "child",
+    "body": [
+      "child:",
+      "  pipeline:",
+      "  config:",
+      "  defaults:",
+      "  inputs:",
+      "    - timestamp: ${1:<TIMESTAMP-VALUE>}:",
+      "      duration: ${2:<DURATION-VALUE>}"
+    ],
+    "description": "Impact Framework manifest \"child\" template."
   }
 }
