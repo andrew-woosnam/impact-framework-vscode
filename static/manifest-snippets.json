@@ -1,4 +1,28 @@
 {
+  "Manifest Template": {
+    "prefix": ["ifmanifest", "manifest"],
+    "body": [
+      "name: $1",
+      "description: $2",
+      "tags: $3",
+      "initialize:",
+      "  plugins:",
+      "    ${4:<PLUGIN-NAME-HERE>}:",
+      "      method: $5",
+      "      path: $6",
+      "  outputs:",
+      "tree:",
+      "  children:",
+      "    child:",
+      "      pipeline:",
+      "      config:",
+      "      defaults:",
+      "      inputs:",
+      "        - timestamp: $7",
+      "          duration: $8"
+    ],
+    "description": "Creates a new manifest template"
+  },
   "Manifest Initialize Section": {
     "prefix": "initialize",
     "body": [
