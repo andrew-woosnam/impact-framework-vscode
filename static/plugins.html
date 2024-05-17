@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Impact Framework Plugins</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+      }
+      .plugin-container {
+        background-color: #ffffff;
+        border: 1px solid #e0e0e0;
+        border-radius: 5px;
+        padding: 20px;
+        margin: 20px;
+      }
+      h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+      }
+      p {
+        font-size: 14px;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="plugin-container">
+      <h2>Cloud Metadata</h2>
+      <p>
+        This plugin allows you to determine an instance's physical processor and
+        thermal design power based on its instance name.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Coefficient</h2>
+      <p>
+        Coefficient is a generic plugin for multiplying a value in an input
+        array by a given coefficient. You provide the name of the value you want
+        to multiply, a coefficient value, and a name to use to append the
+        product to the output array. For example, you could multiply cpu/energy
+        by 10 and name the result energy-product. energy-product would then be
+        added to every observation in your input array as the product of
+        cpu/energy and 10.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Divide</h2>
+      <p>
+        Divide is a generic plugin for doing arithmetic division of two values
+        in an input array. You provide the names of the values you want to
+        divide, and a name to use to add the divide to the output array. For
+        example, boavizta-cpu need cpu/number-cores to work, however
+        cloud-metadata returns vcpus-allocated, to get number of cores you
+        divide vcpus-allocated by 2.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>E-MEM (energy due to memory)</h2>
+      <p>
+        e-mem simply multiples the amount of memory being used by a
+        energy-per-gb (0.000392 kWh/GB) to yield memory/energy.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>E-NET (energy due to networking)</h2>
+      <p>
+        e-net simply multiplies the amount of data transferred (GB) by a
+        coefficient (kWh/GB) to yield network/energy.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Grafana Exporter</h2>
+      <p>
+        Grafana exporter is a modified csv exporter that outputs csv data in a
+        format that works well with our Grafana dashboard.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Mock Observations</h2>
+      <p>
+        A plugin for mocking observations (inputs) for testing and demo purposes
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Multiply</h2>
+      <p>
+        Multiply is a generic plugin for multiplying two or more values in an
+        input array. You provide the names of the values you want to multiply,
+        and a name to use to append the product to the output array. For
+        example, you could multiply cpu/energy and network/energy and name the
+        result energy-product. energy-product would then be added to every
+        observation in your input array as the product of cpu/energy and
+        network/energy.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Regex</h2>
+      <p>
+        Regex is a generic plugin to match part of one string in an input and
+        extract it into an output. You provide the name of the value you want to
+        match, and a name to use to add the regex to the output array. For
+        example, boavizta-cpu need cpu/name to work, however cloud-metadata
+        returns physical-processor which usually contains a long string of
+        processors that the instance could be separated by ,, like so: Intel®
+        Xeon® Platinum 8272CL,Intel® Xeon® 8171M 2.1 GHz,Intel® Xeon® E5-2673 v4
+        2.3 GHz,Intel® Xeon® E5-2673 v3 2.4 GHz
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>SCI-E (total energy)</h2>
+      <p>
+        sci-e is a plugin that simply sums up the contributions to a component's
+        energy use. The plugin returns energy which is used as the input to the
+        sci-o plugin that calculates operational emissions for the component.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>SCI (software carbon intensity)</h2>
+      <p>
+        SCI is the final value the framework ultimately aims to return for some
+        component or application. It represents the amount of carbon emitted per
+        functional unit.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>SCI-M: embodied carbon</h2>
+      <p>
+        Software systems cause emissions through the hardware that they operate
+        on, both through the energy that the physical hardware consumes and the
+        emissions associated with manufacturing the hardware. Embodied carbon
+        refers to the carbon emitted during the manufacture and eventual
+        disposal of a component. It is added to the operational carbon (carbon
+        emitted when a component is used) to give an overall SCI score.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>SCI-O (operational emissions)</h2>
+      <p>
+        Operational emissions refer to the carbon generated by a component while
+        it is in use. It is the product of the energy used by the component in
+        kWh and the grid intensity in gCO2e/kWh. The operational emissions are
+        added to the embodied emissions (calculated using sci-m) to provide an
+        overall SCI score for the component.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Shell</h2>
+      <p>
+        The shell is a wrapper enabling plugins implemented in any other
+        programming language to be executed as a part of IF pipeline. For
+        example, you might have a standalone plugin written in Python. shell
+        spawns a subprocess to execute that Python plugin in a dedicated shell
+        and pipes the results back into IF's Typescript process.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>Sum</h2>
+      <p>
+        Sum is a generic plugin for doing arithmetic sums of two or more values
+        in an input array. You provide the names of the values you want to sum,
+        and a name to use to add the sum to the output array. For example, you
+        could add cpu/energy and network/energy and name the result energy.
+        energy would then be added to every observation in your input array as
+        the sum of cpu/energy and network/energy.
+      </p>
+    </div>
+    <div class="plugin-container">
+      <h2>TDP Finder</h2>
+      <p>
+        The TDP Finder model finds the thermal design power (TDP) of a given
+        processor by looking it up in the model datasets. There are scenarios
+        where the lookup can return multiple possible TDP values. In these
+        cases, we return the maximum of the possible values. There are also
+        cases where no TDP can be found for a specific processor. In these
+        cases, we throw an error. The TDP is then used by other plugins to
+        calculate the cpu/energy value.
+      </p>
+    </div>
+  </body>
+</html>
