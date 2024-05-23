@@ -51,7 +51,7 @@
       "ifPluginsSidebar": [
 				{
 					"type": "webview",
-					"id": "ifPluginsView",
+					"id": "impact-framework-vscode.pluginsView",
 					"name": "IF Plugins"
 				}
 			]

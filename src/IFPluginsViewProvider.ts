@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 
 export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
-  public static readonly viewType = "ifPluginsView";
+  public static readonly viewType = "impact-framework-vscode.pluginsView";
 
   private _view?: vscode.WebviewView;
 
