@@ -65,6 +65,10 @@
     "lint": "eslint src --ext ts",
     "test": "vscode-test"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andrew-woosnam/impact-framework-vscode.git"
+  },
   "devDependencies": {
     "@types/vscode": "^1.88.0",
     "@types/mocha": "^10.0.6",
