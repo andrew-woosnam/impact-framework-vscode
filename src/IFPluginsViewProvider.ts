@@ -40,8 +40,6 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
     let htmlContent = fs.readFileSync(htmlUri.fsPath, "utf8");
     htmlContent = htmlContent.replace(/{{styleUri}}/g, styleUri.toString());
 
-    console.log(htmlContent);
-
     return htmlContent;
   }
 }
