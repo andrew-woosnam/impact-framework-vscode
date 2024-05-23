@@ -17,6 +17,10 @@
       {
         "command": "impact-framework-vscode.createManifest",
         "title": "Create Manifest (Impact Framework)"
+      },
+      {
+        "command": "impact-framework-vscode.listNpmPackages",
+        "title": "List NPM Packages"
       }
     ],
     "capabilities": {

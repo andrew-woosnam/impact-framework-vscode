@@ -1,20 +1,19 @@
-import * as vscode from "vscode";
-import { createManifestYamlAsync } from "./createManifestCmd";
-import { createManifestHoverProvider } from "./hoverProviderFactory";
-import { IFPluginsViewProvider } from "./IFPluginsViewProvider";
+import * as vscode from 'vscode';
+import { createManifestYamlAsync } from './createManifestCmd';
+import { createManifestHoverProvider } from './hoverProviderFactory';
+import { IFPluginsViewProvider } from './IFPluginsViewProvider';
+import { listNpmPackages } from './listNpmPackages';
 
 export function activate(context: vscode.ExtensionContext) {
   let createManifestCmd = vscode.commands.registerCommand(
-    "impact-framework-vscode.createManifest",
+    'impact-framework-vscode.createManifest',
     () => {
       createManifestYamlAsync();
     }
   );
 
-  context.subscriptions.push(createManifestCmd);
-
   vscode.languages.registerHoverProvider(
-    "yaml",
+    'yaml',
     createManifestHoverProvider(context)
   );
 
@@ -25,6 +24,15 @@ export function activate(context: vscode.ExtensionContext) {
       provider
     )
   );
+
+  let listNpmPackagesCmd = vscode.commands.registerCommand(
+    'impact-framework-vscode.listNpmPackages',
+    () => {
+      listNpmPackages();
+    }
+  );
+
+  context.subscriptions.push(createManifestCmd, listNpmPackagesCmd);
 }
 
 export function deactivate() {}
