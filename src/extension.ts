@@ -2,23 +2,8 @@ import * as vscode from "vscode";
 import { createManifestYamlAsync } from "./createManifestCmd";
 import { createManifestHoverProvider } from "./hoverProviderFactory";
 import fs from "fs";
-import path from "path";
 
 export function activate(context: vscode.ExtensionContext) {
-  const panel = vscode.window.createWebviewPanel(
-    "ifPluginsWindow", // Unique ID
-    "Impact Framework Plugins", // Title
-    vscode.ViewColumn.Beside, // Window location
-    {
-      enableScripts: true,
-    }
-  );
-
-  const extensionPath = context.extensionPath;
-  const htmlFilePath = path.join(extensionPath, `static/plugins.html`);
-  const htmlContent = fs.readFileSync(htmlFilePath, "utf8");
-  panel.webview.html = htmlContent;
-
   let createManifestCmd = vscode.commands.registerCommand(
     "impact-framework-vscode.createManifest",
     () => {
@@ -32,6 +17,56 @@ export function activate(context: vscode.ExtensionContext) {
     "yaml",
     createManifestHoverProvider(context)
   );
+
+  vscode.window.registerWebviewViewProvider(
+    "ifPluginsView",
+    new IFPluginsViewProvider(context.extensionUri)
+  );
 }
 
 export function deactivate() {}
+
+class IFPluginsViewProvider implements vscode.WebviewViewProvider {
+  public static readonly viewType = "ifPluginsView";
+
+  private _view?: vscode.WebviewView;
+
+  constructor(private readonly _extensionUri: vscode.Uri) {}
+
+  public resolveWebviewView(
+    webviewView: vscode.WebviewView,
+    context: vscode.WebviewViewResolveContext,
+    _token: vscode.CancellationToken
+  ) {
+    this._view = webviewView;
+
+    webviewView.webview.options = {
+      enableScripts: true,
+      localResourceRoots: [this._extensionUri],
+    };
+
+    webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
+  }
+
+  private _getHtmlForWebview(webview: vscode.Webview) {
+    const styleUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(
+        this._extensionUri,
+        "static",
+        "styles.css"
+      )
+    );
+    const htmlUri = vscode.Uri.joinPath(
+      this._extensionUri,
+      "static",
+      "plugins.html"
+    );
+
+    let htmlContent = fs.readFileSync(htmlUri.fsPath, "utf8");
+    htmlContent = htmlContent.replace(/{{styleUri}}/g, styleUri.toString());
+
+    console.log(htmlContent);
+
+    return htmlContent;
+  }
+}

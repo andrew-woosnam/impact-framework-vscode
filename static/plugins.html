@@ -4,29 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Impact Framework Plugins</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #181818;
-      }
-      .plugin-container {
-        background-color: #1f1f1f;
-        border: 1px solid #868686;
-        border-radius: 5px;
-        padding: 20px;
-        margin: 20px;
-      }
-      h2 {
-        font-size: 18px;
-        margin-bottom: 10px;
-      }
-      p {
-        font-size: 14px;
-        line-height: 1.5;
-      }
-    </style>
+    <link href="{{styleUri}}" rel="stylesheet" />
   </head>
   <body>
     <div class="plugin-container">
@@ -174,11 +152,7 @@
       <p>
         The TDP Finder model finds the thermal design power (TDP) of a given
         processor by looking it up in the model datasets. There are scenarios
-        where the lookup can return multiple possible TDP values. In these
-        cases, we return the maximum of the possible values. There are also
-        cases where no TDP can be found for a specific processor. In these
-        cases, we throw an error. The TDP is then used by other plugins to
-        calculate the cpu/energy value.
+        where the lookup can return mul
       </p>
     </div>
   </body>

@@ -37,7 +37,25 @@
         "language": "yaml",
         "path": "./static/manifest-snippets.json"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "ifPluginsSidebar",
+          "title": "IF Plugins",
+          "icon": "static/if-logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "ifPluginsSidebar": [
+				{
+					"type": "webview",
+					"id": "ifPluginsView",
+					"name": "IF Plugins"
+				}
+			]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
