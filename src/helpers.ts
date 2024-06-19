@@ -7,11 +7,11 @@ export function buildPluginsHtml(plugins: Plugin[]): string {
   for (const plugin of plugins) {
     const listItem = `
         <div class="plugin-listing">
-          <h2>${plugin.name}</h2>
-          <h3>by ${plugin.author}</h3>
-          <p>${plugin.description}</p>
-          <div>
-            ${plugin.tags.map(tag => `<span>${tag}</span>`).join('')}
+          <h2 class="plugin-title">${plugin.name}</h2>
+          <h3 class="plugin-subtitle">by ${plugin.author}</h3>
+          <p class="plugin-description">${plugin.description}</p>
+          <div class="tags-container">
+            ${plugin.tags.map(tag => `<span class="green-tag">${tag}</span>`).join('')}
           </div>
         </div>`;
     pluginsHtml += listItem;
