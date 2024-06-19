@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
-import { buildPluginsHtml } from './helpers';
+import { buildPluginsHtml } from './pluginsHtml';
 
 export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "impact-framework-vscode.pluginsView";

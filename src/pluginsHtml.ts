@@ -1,4 +1,4 @@
-/** helpers.ts */
+/** pluginsHtml.ts */
 import { Plugin } from "./types";
 import * as vscode from 'vscode';
 
