@@ -28,6 +28,10 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
 
   private async _updateHtmlForWebview(webview: vscode.Webview) {
     try {
+      const styleUri = webview.asWebviewUri(
+        vscode.Uri.joinPath(this._extensionUri, "static", "styles.css")
+      );
+
       const response = await axios.post('https://swcmjqwwc9-dsn.algolia.net/1/indexes/*/queries', {
         requests: [
           {
@@ -51,27 +55,7 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
       }
 
       let plugins: Plugin[] = response.data.results[0].hits;
-      const pluginsHtml = buildPluginsHtml(plugins);
-
-      const styleUri = webview.asWebviewUri(
-        vscode.Uri.joinPath(this._extensionUri, "static", "styles.css")
-      );
-
-      const htmlContent = `
-        <!DOCTYPE html>
-        <html lang="en">
-        <head>
-          <meta charset="UTF-8">
-          <link rel="stylesheet" type="text/css" href="${styleUri}">
-          <title>IF Plugins</title>
-        </head>
-        <body>
-        ${pluginsHtml}
-        </body>
-        </html>
-      `;
-
-      webview.html = htmlContent;
+      webview.html = buildPluginsHtml(plugins, styleUri);
     } catch (error) {
       console.error("Failed to fetch plugins:", error);
       webview.html = "<p>Failed to load plugins. Please try again later.</p>";

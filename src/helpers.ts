@@ -1,7 +1,8 @@
 /** helpers.ts */
 import { Plugin } from "./types";
+import * as vscode from 'vscode';
 
-export function buildPluginsHtml(plugins: Plugin[]): string {
+export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
   let pluginsHtml = '';
 
   for (const plugin of plugins) {
@@ -17,5 +18,18 @@ export function buildPluginsHtml(plugins: Plugin[]): string {
     pluginsHtml += listItem;
   }
 
-  return `<div class="plugins-list">${pluginsHtml}</div>`;
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <link rel="stylesheet" type="text/css" href="${styleUri}">
+      <title>IF Plugins</title>
+    </head>
+    <body>
+    ${pluginsHtml}
+    </body>
+    </html>`;
+
+  return htmlContent;
 }
