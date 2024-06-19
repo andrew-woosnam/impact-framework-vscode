@@ -1,11 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap');
 
+body {
+    margin: 0;
+    padding: 0;
+}
+
 .plugin-listing {
     width: 100%;
-    max-width: 400px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    padding: 24px;
+    padding-top: 0;
 }
 
 .plugin-listing:hover {
@@ -16,24 +22,28 @@
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     font-weight: 800;
+    width: 90%;
 }
 
 .plugin-subtitle {
     font-family: 'Nunito', sans-serif;
     font-size: 14px;
     font-weight: 600;
+    width: 90%;
 }
 
 .plugin-description {
     font-family: 'Nunito', sans-serif;
     font-size: 18px;
     font-weight: 400;
+    width: 90%;
 }
 
 .tags-container {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
+    width: 90%;
 }
 
 .green-tag {
