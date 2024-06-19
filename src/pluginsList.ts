@@ -1,4 +1,4 @@
-/** pluginsHtml.ts */
+/** pluginsList.ts */
 import { Plugin } from "./types";
 import * as vscode from 'vscode';
 
@@ -40,7 +40,7 @@ function generateHtmlContent(pluginsHtml: string, styleUri: vscode.Uri): string 
     </html>`;
 }
 
-export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
+export function generatePluginsListHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
   const pluginsHtml = plugins.map(createPluginListItem).join('');
   return generateHtmlContent(pluginsHtml, styleUri);
 }

@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
-import { buildPluginsHtml } from './pluginsHtml';
+import { generatePluginsListHtml } from './pluginsList';
 
 let globalPlugins: Plugin[] = [];
 
@@ -43,7 +43,7 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
       }
 
       globalPlugins = response.data.results[0].hits;
-      webview.html = buildPluginsHtml(globalPlugins, styleUri);
+      webview.html = generatePluginsListHtml(globalPlugins, styleUri);
       this._setupMessageListener(webview);
 
     } catch (error) {
