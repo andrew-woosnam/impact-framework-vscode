@@ -1,4 +1,4 @@
-/** IFPluginsViewProvider.ts */
+/** pluginExplorer.ts */
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
@@ -6,7 +6,7 @@ import { buildPluginsHtml } from './pluginsHtml';
 
 let globalPlugins: Plugin[] = [];
 
-export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
+export class PluginExplorer implements vscode.WebviewViewProvider {
   public static readonly viewType = "impact-framework-vscode.pluginsView";
 
   private _view?: vscode.WebviewView;

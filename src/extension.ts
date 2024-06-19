@@ -2,7 +2,7 @@
 import * as vscode from "vscode";
 import { createManifestYamlAsync } from "./createManifestCmd";
 import { createManifestHoverProvider } from "./hoverProviderFactory";
-import { IFPluginsViewProvider } from './IFPluginsViewProvider';
+import { PluginExplorer } from './pluginExplorer';
 import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
 import path from "path";
@@ -20,9 +20,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   vscode.languages.registerHoverProvider("yaml", createManifestHoverProvider(context));
 
-  const provider = new IFPluginsViewProvider(context.extensionUri);
+  const provider = new PluginExplorer(context.extensionUri);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(IFPluginsViewProvider.viewType, provider)
+    vscode.window.registerWebviewViewProvider(PluginExplorer.viewType, provider)
   );
 
   registerCommand(context, "impact-framework-vscode.showPluginDetails", (plugin: Plugin) => {
