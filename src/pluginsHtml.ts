@@ -2,23 +2,20 @@
 import { Plugin } from "./types";
 import * as vscode from 'vscode';
 
-export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
-  let pluginsHtml = '';
+function createPluginListItem(plugin: Plugin): string {
+  return `
+    <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${plugin.objectID}">
+      <h2 class="plugin-title">${plugin.name}</h2>
+      <h3 class="plugin-subtitle">by ${plugin.author}</h3>
+      <p class="plugin-description">${plugin.description}</p>
+      <div class="tags-container">
+        ${plugin.tags.map(tag => `<span class="green-tag">${tag}</span>`).join('')}
+      </div>
+    </div>`;
+}
 
-  plugins.forEach((plugin) => {
-    const listItem = `
-        <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${plugin.objectID}">
-          <h2 class="plugin-title">${plugin.name}</h2>
-          <h3 class="plugin-subtitle">by ${plugin.author}</h3>
-          <p class="plugin-description">${plugin.description}</p>
-          <div class="tags-container">
-            ${plugin.tags.map(tag => `<span class="green-tag">${tag}</span>`).join('')}
-          </div>
-        </div>`;
-    pluginsHtml += listItem;
-  });
-
-  const htmlContent = `
+function generateHtmlContent(pluginsHtml: string, styleUri: vscode.Uri): string {
+  return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -41,6 +38,9 @@ export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): strin
     </script>
     </body>
     </html>`;
+}
 
-  return htmlContent;
+export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
+  const pluginsHtml = plugins.map(createPluginListItem).join('');
+  return generateHtmlContent(pluginsHtml, styleUri);
 }
