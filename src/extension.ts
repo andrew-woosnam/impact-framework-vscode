@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { createManifestYamlAsync } from "./createManifestCmd";
 import { createManifestHoverProvider } from "./hoverProviderFactory";
-import { IFPluginsViewProvider } from "./IFPluginsViewProvider";
+import { IFPluginsViewProvider } from './IFPluginsViewProvider';
 import * as dotenv from 'dotenv';
 import path from "path";
 

@@ -1,5 +1,8 @@
+/** IFPluginsViewProvider.ts */
 import * as vscode from 'vscode';
 import axios from 'axios';
+import { Plugin } from './types';
+import { buildPluginsHtml } from './helpers';
 
 export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "impact-framework-vscode.pluginsView";
@@ -47,13 +50,8 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
         return;
       }
 
-      const plugins = response.data.results[0].hits;
-      console.log('Fetched plugins:', plugins);
-
-      let pluginsHtml = '';
-      for (const plugin of plugins) {
-        pluginsHtml += `<li>${plugin.name} - ${plugin.description}</li>`;
-      }
+      let plugins: Plugin[] = response.data.results[0].hits;
+      const pluginsHtml = buildPluginsHtml(plugins);
 
       const styleUri = webview.asWebviewUri(
         vscode.Uri.joinPath(this._extensionUri, "static", "styles.css")
@@ -64,14 +62,11 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
         <html lang="en">
         <head>
           <meta charset="UTF-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
           <link rel="stylesheet" type="text/css" href="${styleUri}">
           <title>IF Plugins</title>
         </head>
         <body>
-          <ul>
-            ${pluginsHtml}
-          </ul>
+        ${pluginsHtml}
         </body>
         </html>
       `;
