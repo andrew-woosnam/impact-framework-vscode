@@ -8,4 +8,5 @@ export interface Plugin {
     link3: string;
     npmWeeklyDownload: number;
     githubStars: number;
+    objectID: string;
 }

@@ -6,6 +6,7 @@ import { IFPluginsViewProvider } from './IFPluginsViewProvider';
 import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
 import path from "path";
+import { Plugin } from "./types";
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
@@ -34,8 +35,8 @@ export function activate(context: vscode.ExtensionContext) {
 
   let showPluginDetailsCmd = vscode.commands.registerCommand(
     "impact-framework-vscode.showPluginDetails",
-    (pluginId: string) => {
-      showPluginDetails(pluginId);
+    (plugin: Plugin) => {
+      showPluginDetails(plugin);
     }
   );
 

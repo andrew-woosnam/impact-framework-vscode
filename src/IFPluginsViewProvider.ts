@@ -1,7 +1,10 @@
+/** IFPluginsViewProvider.ts */
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
 import { buildPluginsHtml } from './pluginsHtml';
+
+let globalPlugins: Plugin[] = [];
 
 export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "impact-framework-vscode.pluginsView";
@@ -53,14 +56,17 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
         return;
       }
 
-      let plugins: Plugin[] = response.data.results[0].hits;
-      webview.html = buildPluginsHtml(plugins, styleUri);
+      globalPlugins = response.data.results[0].hits; // Store plugins globally
+      webview.html = buildPluginsHtml(globalPlugins, styleUri);
 
       webview.onDidReceiveMessage(
         message => {
           console.log('Received message:', message);
           if (message.command === 'impact-framework-vscode.showPluginDetails') {
-            vscode.commands.executeCommand(message.command, message.pluginId);
+            const plugin = globalPlugins.find(p => p.objectID === message.pluginId);
+            if (plugin) {
+              vscode.commands.executeCommand(message.command, plugin);
+            }
           }
         }
       );

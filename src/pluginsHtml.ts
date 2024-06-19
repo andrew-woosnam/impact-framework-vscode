@@ -1,12 +1,13 @@
+/** pluginsHtml.ts */
 import { Plugin } from "./types";
 import * as vscode from 'vscode';
 
 export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
   let pluginsHtml = '';
 
-  plugins.forEach((plugin, index) => {
+  plugins.forEach((plugin) => {
     const listItem = `
-        <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${index + 1}">
+        <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${plugin.objectID}">
           <h2 class="plugin-title">${plugin.name}</h2>
           <h3 class="plugin-subtitle">by ${plugin.author}</h3>
           <p class="plugin-description">${plugin.description}</p>
