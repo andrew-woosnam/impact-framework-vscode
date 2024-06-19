@@ -2,7 +2,7 @@
 import * as vscode from "vscode";
 import { Plugin } from "./types";
 
-export async function showPluginDetails(plugin: Plugin) {
+export async function showPluginDetails(plugin: Plugin, extensionUri: vscode.Uri) {
     const panel = vscode.window.createWebviewPanel(
         'pluginDetails', // Identifies the type of the webview. Used internally
         'Plugin Details', // Title of the panel displayed to the user
@@ -12,29 +12,33 @@ export async function showPluginDetails(plugin: Plugin) {
         }
     );
 
+    const styleUri = panel.webview.asWebviewUri(
+        vscode.Uri.joinPath(extensionUri, 'static', 'styles.css')
+    );
+
     const htmlContent = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>Plugin Details</title>
-        <style>
-            body {
-                font-family: Arial, sans-serif;
-                padding: 20px;
-            }
-            .plugin-title {
-                font-size: 24px;
-                font-weight: bold;
-            }
-            .plugin-details {
-                margin-top: 10px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="${styleUri}">
     </head>
-    <body>
-        <div class="plugin-title">${plugin.name}</div>
-        <div class="plugin-details">${plugin.description}</div>
+    <body class="details-body">
+        <div class="details-title">${plugin.name}</div>
+        <div class="details-subtitle">by ${plugin.author}</div>
+        <div class="details-description">${plugin.description}</div>
+        <div class="details-tags-container">
+            ${plugin.tags.map(tag => `<span class="details-green-tag">${tag}</span>`).join('')}
+        </div>
+        <div class="details-stats">
+            <div><strong>NPM Downloads:</strong> ${plugin.npmDownloads.toLocaleString()}</div>
+            <div><strong>GitHub Stars:</strong> ${plugin.githubStars.toLocaleString()}</div>
+        </div>
+        <div class="details-links">
+            <a href="${plugin.docs}" target="_blank">Documentation</a>
+            <a href="${plugin.github}" target="_blank">GitHub Repository</a>
+        </div>
     </body>
     </html>`;
 

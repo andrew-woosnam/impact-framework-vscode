@@ -1,12 +1,11 @@
 export interface Plugin {
+    objectID: string;
     name: string;
     author: string;
     description: string;
     tags: string[];
-    link1: string;
-    link2: string;
-    link3: string;
-    npmWeeklyDownload: number;
+    docs: string;
+    github: string;
+    npmDownloads: number;
     githubStars: number;
-    objectID: string;
 }

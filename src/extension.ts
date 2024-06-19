@@ -36,7 +36,7 @@ export function activate(context: vscode.ExtensionContext) {
   let showPluginDetailsCmd = vscode.commands.registerCommand(
     "impact-framework-vscode.showPluginDetails",
     (plugin: Plugin) => {
-      showPluginDetails(plugin);
+      showPluginDetails(plugin, context.extensionUri);
     }
   );
 
