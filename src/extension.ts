@@ -2,6 +2,10 @@ import * as vscode from "vscode";
 import { createManifestYamlAsync } from "./createManifestCmd";
 import { createManifestHoverProvider } from "./hoverProviderFactory";
 import { IFPluginsViewProvider } from "./IFPluginsViewProvider";
+import * as dotenv from 'dotenv';
+import path from "path";
+
+dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 export function activate(context: vscode.ExtensionContext) {
   let createManifestCmd = vscode.commands.registerCommand(
@@ -27,4 +31,4 @@ export function activate(context: vscode.ExtensionContext) {
   );
 }
 
-export function deactivate() {}
+export function deactivate() { }
