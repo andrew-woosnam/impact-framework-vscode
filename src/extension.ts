@@ -10,37 +10,24 @@ import { Plugin } from "./types";
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
+function registerCommand(context: vscode.ExtensionContext, command: string, callback: (...args: any[]) => any) {
+  let cmd = vscode.commands.registerCommand(command, callback);
+  context.subscriptions.push(cmd);
+}
+
 export function activate(context: vscode.ExtensionContext) {
-  let createManifestCmd = vscode.commands.registerCommand(
-    "impact-framework-vscode.createManifest",
-    () => {
-      createManifestYamlAsync();
-    }
-  );
+  registerCommand(context, "impact-framework-vscode.createManifest", createManifestYamlAsync);
 
-  context.subscriptions.push(createManifestCmd);
-
-  vscode.languages.registerHoverProvider(
-    "yaml",
-    createManifestHoverProvider(context)
-  );
+  vscode.languages.registerHoverProvider("yaml", createManifestHoverProvider(context));
 
   const provider = new IFPluginsViewProvider(context.extensionUri);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      IFPluginsViewProvider.viewType,
-      provider
-    )
+    vscode.window.registerWebviewViewProvider(IFPluginsViewProvider.viewType, provider)
   );
 
-  let showPluginDetailsCmd = vscode.commands.registerCommand(
-    "impact-framework-vscode.showPluginDetails",
-    (plugin: Plugin) => {
-      showPluginDetails(plugin, context.extensionUri);
-    }
-  );
-
-  context.subscriptions.push(showPluginDetailsCmd);
+  registerCommand(context, "impact-framework-vscode.showPluginDetails", (plugin: Plugin) => {
+    showPluginDetails(plugin, context.extensionUri);
+  });
 }
 
 export function deactivate() { }
