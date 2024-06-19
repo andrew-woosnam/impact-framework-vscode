@@ -1,13 +1,12 @@
-/** pluginsHtml.ts */
 import { Plugin } from "./types";
 import * as vscode from 'vscode';
 
 export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): string {
   let pluginsHtml = '';
 
-  for (const plugin of plugins) {
+  plugins.forEach((plugin, index) => {
     const listItem = `
-        <div class="plugin-listing">
+        <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${index + 1}">
           <h2 class="plugin-title">${plugin.name}</h2>
           <h3 class="plugin-subtitle">by ${plugin.author}</h3>
           <p class="plugin-description">${plugin.description}</p>
@@ -16,7 +15,7 @@ export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): strin
           </div>
         </div>`;
     pluginsHtml += listItem;
-  }
+  });
 
   const htmlContent = `
     <!DOCTYPE html>
@@ -28,6 +27,17 @@ export function buildPluginsHtml(plugins: Plugin[], styleUri: vscode.Uri): strin
     </head>
     <body>
     ${pluginsHtml}
+    <script>
+      const vscode = acquireVsCodeApi();
+      document.querySelectorAll('.plugin-listing').forEach(item => {
+        item.addEventListener('click', event => {
+          const pluginId = event.currentTarget.getAttribute('data-plugin-id');
+          const command = event.currentTarget.getAttribute('data-command');
+          console.log('Posting message:', { command, pluginId });
+          vscode.postMessage({ command, pluginId });
+        });
+      });
+    </script>
     </body>
     </html>`;
 

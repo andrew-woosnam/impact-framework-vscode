@@ -1,4 +1,3 @@
-/** IFPluginsViewProvider.ts */
 import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
@@ -56,6 +55,16 @@ export class IFPluginsViewProvider implements vscode.WebviewViewProvider {
 
       let plugins: Plugin[] = response.data.results[0].hits;
       webview.html = buildPluginsHtml(plugins, styleUri);
+
+      webview.onDidReceiveMessage(
+        message => {
+          console.log('Received message:', message);
+          if (message.command === 'impact-framework-vscode.showPluginDetails') {
+            vscode.commands.executeCommand(message.command, message.pluginId);
+          }
+        }
+      );
+
     } catch (error) {
       console.error("Failed to fetch plugins:", error);
       webview.html = "<p>Failed to load plugins. Please try again later.</p>";

@@ -1,7 +1,9 @@
+/** extension.ts */
 import * as vscode from "vscode";
 import { createManifestYamlAsync } from "./createManifestCmd";
 import { createManifestHoverProvider } from "./hoverProviderFactory";
 import { IFPluginsViewProvider } from './IFPluginsViewProvider';
+import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
 import path from "path";
 
@@ -29,6 +31,15 @@ export function activate(context: vscode.ExtensionContext) {
       provider
     )
   );
+
+  let showPluginDetailsCmd = vscode.commands.registerCommand(
+    "impact-framework-vscode.showPluginDetails",
+    (pluginId: string) => {
+      showPluginDetails(pluginId);
+    }
+  );
+
+  context.subscriptions.push(showPluginDetailsCmd);
 }
 
 export function deactivate() { }
