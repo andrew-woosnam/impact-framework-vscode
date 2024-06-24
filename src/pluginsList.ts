@@ -1,6 +1,6 @@
 /** pluginsList.ts */
-import { Plugin } from "./types";
 import * as vscode from 'vscode';
+import { Plugin } from "./types";
 
 function extractPackageName(npmUrl?: string): string {
   if (!npmUrl) {
@@ -14,10 +14,10 @@ function createPluginListItem(plugin: Plugin): string {
   const npmPackage = extractPackageName(plugin.npm);
   return `
     <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${plugin.objectID}">
-    <div class="plugin-header">
-      <h2 class="plugin-title">${plugin.name}</h2>
-      <div class="plugin-install-btn" data-command="npm install ${npmPackage}">Install</div>
-    </div>
+      <div class="plugin-header">
+        <h2 class="plugin-title">${plugin.name}</h2>
+        <div class="plugin-install-btn" data-command="execNpmInstall" data-package-name="${npmPackage}">Install</div>
+      </div>
       <h3 class="plugin-subtitle">by ${plugin.author}</h3>
       <p class="plugin-description">${plugin.description}</p>
     ${plugin.tags ? `
@@ -55,7 +55,8 @@ function generateHtmlContent(pluginsHtml: string, styleUri: vscode.Uri): string 
         button.addEventListener('click', event => {
           event.stopPropagation();
           const command = event.currentTarget.getAttribute('data-command');
-          vscode.postMessage({ command: 'execCommand', args: command });
+          const packageName = event.currentTarget.getAttribute('data-package-name');
+          vscode.postMessage({ command, args: packageName });
         });
       });
     </script>

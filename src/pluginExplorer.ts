@@ -3,7 +3,7 @@ import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
 import { generatePluginsListHtml } from './pluginsList';
-import { exec } from 'child_process';
+import { CommandExecutor } from './commandExecutor';
 
 let globalPlugins: Plugin[] = [];
 
@@ -11,8 +11,11 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
   public static readonly viewType = "impact-framework-vscode.pluginsView";
 
   private _view?: vscode.WebviewView;
+  private _commandExecutor: CommandExecutor;
 
-  constructor(private readonly _extensionUri: vscode.Uri) { }
+  constructor(private readonly _extensionUri: vscode.Uri) {
+    this._commandExecutor = new CommandExecutor();
+  }
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -86,30 +89,22 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
             vscode.commands.executeCommand(message.command, plugin);
           }
         }
-        if (message.command === 'execCommand') {
+        else if (message.command === 'execNpmInstall') {
           try {
-            const cmdName = message.args;
-            if (!cmdName) {
-              console.error('No command specified');
+            const packageName = message.args;
+            if (!packageName) {
+              console.error('No package name specified');
               return;
             }
             const workspaceFolders = vscode.workspace.workspaceFolders;
             if (!workspaceFolders || workspaceFolders.length === 0) {
-              // TODO: prompt modal: "where would you like to install this package?"
               console.error('No workspace folder open');
               return;
             }
             const workspaceFolder = workspaceFolders[0].uri.fsPath;
-            exec(cmdName, { cwd: workspaceFolder }, (error, stdout, stderr) => {
-              if (error) {
-                console.error(`exec error: ${error}`);
-                return;
-              }
-              if (stdout) { console.log(`[${cmdName}] stdout:\n${stdout}`); }
-              if (stderr) { console.error(`[${cmdName}] stderr:\n${stderr}`); }
-            });
+            this._commandExecutor.executeNpmInstall(packageName, workspaceFolder);
           } catch (error) {
-            console.error('Command execution failed:', error);
+            console.error('npm install execution failed:', error);
           }
         }
       }
