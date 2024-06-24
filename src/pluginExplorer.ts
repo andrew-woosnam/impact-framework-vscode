@@ -19,7 +19,7 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
 
   public resolveWebviewView(
     webviewView: vscode.WebviewView,
-    context: vscode.WebviewViewResolveContext,
+    _context: vscode.WebviewViewResolveContext,
     _token: vscode.CancellationToken,
   ) {
     this._view = webviewView;
@@ -35,11 +35,11 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
   }
 
   private async _updateHtmlForWebview(webview: vscode.Webview) {
-    try {
-      const styleUri = webview.asWebviewUri(
-        vscode.Uri.joinPath(this._extensionUri, 'static', 'styles.css'),
-      );
+    const styleUri = webview.asWebviewUri(
+      vscode.Uri.joinPath(this._extensionUri, 'static', 'styles.css'),
+    );
 
+    try {
       const response = await this._fetchPlugins();
       if (response.status !== 200) {
         this._handleFetchError(webview, response.status);
@@ -50,8 +50,7 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
       webview.html = generatePluginsListHtml(globalPlugins, styleUri);
       this._setupMessageListener(webview);
     } catch (error) {
-      console.error('Failed to fetch plugins:', error);
-      webview.html = '<p>Failed to load plugins. Please try again later.</p>';
+      this._handleFetchError(webview, error);
     }
   }
 
@@ -78,8 +77,8 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
     );
   }
 
-  private _handleFetchError(webview: vscode.Webview, status: number) {
-    console.error(`Failed to fetch plugins. Status: ${status}`);
+  private _handleFetchError(webview: vscode.Webview, error: any) {
+    console.error('Failed to fetch plugins:', error);
     webview.html = '<p>Failed to load plugins. Please try again later.</p>';
   }
 
@@ -87,19 +86,28 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
     webview.onDidReceiveMessage(async (message) => {
       console.log('Received message:', message);
       if (message.command === 'impact-framework-vscode.showPluginDetails') {
-        const plugin = globalPlugins.find(
-          (p) => p.objectID === message.pluginId,
-        );
-        if (plugin) {
-          vscode.commands.executeCommand(message.command, plugin);
-        }
+        this._handleShowPluginDetails(message.pluginId);
       } else if (message.command === 'execNpmInstall') {
-        try {
-          this._commandExecutor.executeNpmInstall(message.args);
-        } catch (error) {
-          console.error('npm install execution failed:', error);
-        }
+        this._handleExecNpmInstall(message.args);
       }
     });
+  }
+
+  private _handleShowPluginDetails(pluginId: string) {
+    const plugin = globalPlugins.find((p) => p.objectID === pluginId);
+    if (plugin) {
+      vscode.commands.executeCommand(
+        'impact-framework-vscode.showPluginDetails',
+        plugin,
+      );
+    }
+  }
+
+  private _handleExecNpmInstall(packageName: string) {
+    try {
+      this._commandExecutor.executeNpmInstall(packageName);
+    } catch (error) {
+      console.error('npm install execution failed:', error);
+    }
   }
 }
