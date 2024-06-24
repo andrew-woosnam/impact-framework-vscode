@@ -10,20 +10,30 @@ export class CommandExecutor {
   }
 
   public executeNpmInstall(packageName: string) {
+    if (!this._validatePackageName(packageName)) return;
+
+    const workspaceFolder = this._getWorkspaceFolder();
+    if (!workspaceFolder) return;
+
+    const cmd = `npm install ${packageName}`;
+    this._executeCommand(cmd, workspaceFolder);
+  }
+
+  private _validatePackageName(packageName: string): boolean {
     if (!packageName) {
       vscode.window.showErrorMessage('Package name unknown.');
-      return;
+      return false;
     }
+    return true;
+  }
 
+  private _getWorkspaceFolder(): string | undefined {
     const workspaceFolders = vscode.workspace.workspaceFolders;
     if (!workspaceFolders || workspaceFolders.length === 0) {
       vscode.window.showErrorMessage('No workspace folder open.');
-      return;
+      return undefined;
     }
-
-    const workspaceFolder = workspaceFolders[0].uri.fsPath;
-    const cmd = `npm install ${packageName}`;
-    this._executeCommand(cmd, workspaceFolder);
+    return workspaceFolders[0].uri.fsPath;
   }
 
   private _executeCommand(cmd: string, cwd: string) {
@@ -31,18 +41,26 @@ export class CommandExecutor {
     this._outputChannel.appendLine(`Executing command: ${cmd}`);
     exec(cmd, { cwd }, (error, stdout, stderr) => {
       if (error) {
-        this._outputChannel.appendLine(`exec error: ${error}`);
-        vscode.window.showErrorMessage(
-          `Command execution failed: ${error.message}`,
-        );
+        this._logError(error);
         return;
       }
-      if (stdout) {
-        this._outputChannel.appendLine(`[${cmd}] stdout:\n${stdout}`);
-      }
-      if (stderr) {
-        this._outputChannel.appendLine(`[${cmd}] stderr:\n${stderr}`);
-      }
+      this._logOutput(cmd, stdout, stderr);
     });
+  }
+
+  private _logError(error: Error) {
+    this._outputChannel.appendLine(`exec error: ${error}`);
+    vscode.window.showErrorMessage(
+      `Command execution failed: ${error.message}`,
+    );
+  }
+
+  private _logOutput(cmd: string, stdout: string, stderr: string) {
+    if (stdout) {
+      this._outputChannel.appendLine(`[${cmd}] stdout:\n${stdout}`);
+    }
+    if (stderr) {
+      this._outputChannel.appendLine(`[${cmd}] stderr:\n${stderr}`);
+    }
   }
 }
