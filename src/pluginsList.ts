@@ -12,27 +12,24 @@ function extractPackageName(npmUrl?: string): string {
 
 function createPluginListItem(plugin: Plugin): string {
   const npmPackage = extractPackageName(plugin.npm);
+  const tagsHtml = plugin.tags ? generateTagsHtml(plugin.tags) : '';
+
   return `
-    <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${
-      plugin.objectID
-    }">
+    <div class="plugin-listing" data-command="impact-framework-vscode.showPluginDetails" data-plugin-id="${plugin.objectID}">
       <div class="plugin-header">
         <h2 class="plugin-title">${plugin.name}</h2>
         <div class="plugin-install-btn" data-command="execNpmInstall" data-package-name="${npmPackage}">Install</div>
       </div>
       <h3 class="plugin-subtitle">by ${plugin.author}</h3>
       <p class="plugin-description">${plugin.description}</p>
-    ${
-      plugin.tags
-        ? `
-        <div class="tags-container">
-          ${plugin.tags
-            .map((tag) => `<span class="green-tag">${tag}</span>`)
-            .join('')}
-        </div>
-      `
-        : ''
-    }
+      ${tagsHtml}
+    </div>`;
+}
+
+function generateTagsHtml(tags: string[]): string {
+  return `
+    <div class="tags-container">
+      ${tags.map((tag) => `<span class="green-tag">${tag}</span>`).join('')}
     </div>`;
 }
 
@@ -57,7 +54,6 @@ function generateHtmlContent(
         item.addEventListener('click', event => {
           const pluginId = event.currentTarget.getAttribute('data-plugin-id');
           const command = event.currentTarget.getAttribute('data-command');
-          console.log('Posting message:', { command, pluginId });
           vscode.postMessage({ command, pluginId });
         });
       });
