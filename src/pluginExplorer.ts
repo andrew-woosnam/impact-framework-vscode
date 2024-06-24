@@ -14,7 +14,7 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
   private _commandExecutor: CommandExecutor;
 
   constructor(private readonly _extensionUri: vscode.Uri) {
-    this._commandExecutor = new CommandExecutor();
+    this._commandExecutor = new CommandExecutor('Impact Framework');
   }
 
   public resolveWebviewView(
