@@ -1,9 +1,9 @@
 /** showPluginDetailsCmd.ts */
-import * as vscode from "vscode";
-import { Plugin } from "./types";
+import * as vscode from 'vscode';
+import { Plugin } from './types';
 
 function getPluginDetailsHtml(plugin: Plugin, styleUri: vscode.Uri): string {
-    return `
+  return `
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -15,37 +15,75 @@ function getPluginDetailsHtml(plugin: Plugin, styleUri: vscode.Uri): string {
         <div class="details-title">${plugin.name}</div>
         <div class="details-subtitle">by ${plugin.author}</div>
         <div class="details-description">${plugin.description}</div>
-        ${plugin.tags ? `
-            <div class="details-tags-container">
-              ${plugin.tags.map(tag => `<span class="details-green-tag">${tag}</span>`).join('')}
-            </div>
-            ` : ''}
-            ${plugin.npmDownloads || plugin.githubStars ? `
-                <div class="details-stats">
-                  ${plugin.npmDownloads ? `<div><strong>NPM Downloads:</strong> ${plugin.npmDownloads.toLocaleString()}</div>` : ''}
-                  ${plugin.githubStars ? `<div><strong>GitHub Stars:</strong> ${plugin.githubStars.toLocaleString()}</div>` : ''}
-                </div>
-                ` : ''}
-        <div class="details-links">
-            ${plugin.docs ? `<a href="${plugin.docs}" target="_blank">Documentation</a>` : ''}
-            ${plugin.github ? `<a href="${plugin.github}" target="_blank">GitHub Repository</a>` : ''}
-            ${plugin.npm ? `<a href="${plugin.npm}" target="_blank">NPM</a>` : ''}
+            ${generateTags(plugin.tags)}
+            ${generateStats(plugin.npmDownloads, plugin.githubStars)}
+            ${generateLinks(plugin.docs, plugin.github, plugin.npm)}
         </div>
     </body>
     </html>`;
 }
 
-export async function showPluginDetails(plugin: Plugin, extensionUri: vscode.Uri) {
-    const panel = vscode.window.createWebviewPanel(
-        'pluginDetails',
-        'Plugin Details',
-        vscode.ViewColumn.One,
-        { enableScripts: true }
-    );
+export async function showPluginDetails(
+  plugin: Plugin,
+  extensionUri: vscode.Uri,
+) {
+  const panel = vscode.window.createWebviewPanel(
+    'pluginDetails',
+    'Plugin Details',
+    vscode.ViewColumn.One,
+    { enableScripts: true },
+  );
 
-    const styleUri = panel.webview.asWebviewUri(
-        vscode.Uri.joinPath(extensionUri, 'static', 'styles.css')
-    );
+  const styleUri = panel.webview.asWebviewUri(
+    vscode.Uri.joinPath(extensionUri, 'static', 'styles.css'),
+  );
 
-    panel.webview.html = getPluginDetailsHtml(plugin, styleUri);
+  panel.webview.html = getPluginDetailsHtml(plugin, styleUri);
 }
+
+const generateTags = (tags?: string[]): string => {
+  if (!tags) return '';
+  return `
+      <div class="details-tags-container">
+        ${tags
+          .map((tag) => `<span class="details-green-tag">${tag}</span>`)
+          .join('')}
+      </div>
+    `;
+};
+
+const generateStats = (npmDownloads?: number, githubStars?: number): string => {
+  if (!npmDownloads && !githubStars) return '';
+  return `
+      <div class="details-stats">
+        ${
+          npmDownloads
+            ? `<div><strong>NPM Downloads:</strong> ${npmDownloads.toLocaleString()}</div>`
+            : ''
+        }
+        ${
+          githubStars
+            ? `<div><strong>GitHub Stars:</strong> ${githubStars.toLocaleString()}</div>`
+            : ''
+        }
+      </div>
+    `;
+};
+
+const generateLinks = (
+  docs?: string,
+  github?: string,
+  npm?: string,
+): string => {
+  return `
+      <div class="details-links">
+        ${docs ? `<a href="${docs}" target="_blank">Documentation</a>` : ''}
+        ${
+          github
+            ? `<a href="${github}" target="_blank">GitHub Repository</a>`
+            : ''
+        }
+        ${npm ? `<a href="${npm}" target="_blank">NPM</a>` : ''}
+      </div>
+    `;
+};

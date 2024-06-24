@@ -1,33 +1,51 @@
 /** extension.ts */
-import * as vscode from "vscode";
-import { createManifestYamlAsync } from "./createManifestCmd";
-import { createManifestHoverProvider } from "./hoverProviderFactory";
+import * as vscode from 'vscode';
+import { createManifestYamlAsync } from './createManifestCmd';
+import { createManifestHoverProvider } from './hoverProviderFactory';
 import { PluginExplorer } from './pluginExplorer';
 import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
-import path from "path";
-import { Plugin } from "./types";
+import path from 'path';
+import { Plugin } from './types';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
-function registerCommand(context: vscode.ExtensionContext, command: string, callback: (...args: any[]) => any) {
+function registerCommand(
+  context: vscode.ExtensionContext,
+  command: string,
+  callback: (...args: any[]) => any,
+) {
   let cmd = vscode.commands.registerCommand(command, callback);
   context.subscriptions.push(cmd);
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  registerCommand(context, "impact-framework-vscode.createManifest", createManifestYamlAsync);
+  registerCommand(
+    context,
+    'impact-framework-vscode.createManifest',
+    createManifestYamlAsync,
+  );
 
-  vscode.languages.registerHoverProvider("yaml", createManifestHoverProvider(context));
+  vscode.languages.registerHoverProvider(
+    'yaml',
+    createManifestHoverProvider(context),
+  );
 
   const provider = new PluginExplorer(context.extensionUri);
   context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(PluginExplorer.viewType, provider)
+    vscode.window.registerWebviewViewProvider(
+      PluginExplorer.viewType,
+      provider,
+    ),
   );
 
-  registerCommand(context, "impact-framework-vscode.showPluginDetails", (plugin: Plugin) => {
-    showPluginDetails(plugin, context.extensionUri);
-  });
+  registerCommand(
+    context,
+    'impact-framework-vscode.showPluginDetails',
+    (plugin: Plugin) => {
+      showPluginDetails(plugin, context.extensionUri);
+    },
+  );
 }
 
-export function deactivate() { }
+export function deactivate() {}
