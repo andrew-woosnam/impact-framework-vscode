@@ -3,9 +3,10 @@ export interface Plugin {
     name: string;
     author: string;
     description: string;
-    tags: string[];
-    docs: string;
-    github: string;
-    npmDownloads: number;
-    githubStars: number;
+    tags: string[] | undefined;
+    docs: string | undefined;
+    npm: string | undefined;
+    github: string | undefined;
+    npmDownloads: number | undefined;
+    githubStars: number | undefined;
 }

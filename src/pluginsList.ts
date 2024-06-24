@@ -8,9 +8,11 @@ function createPluginListItem(plugin: Plugin): string {
       <h2 class="plugin-title">${plugin.name}</h2>
       <h3 class="plugin-subtitle">by ${plugin.author}</h3>
       <p class="plugin-description">${plugin.description}</p>
-      <div class="tags-container">
-        ${plugin.tags.map(tag => `<span class="green-tag">${tag}</span>`).join('')}
-      </div>
+    ${plugin.tags ? `
+        <div class="tags-container">
+          ${plugin.tags.map(tag => `<span class="green-tag">${tag}</span>`).join('')}
+        </div>
+      ` : ''}
     </div>`;
 }
 
