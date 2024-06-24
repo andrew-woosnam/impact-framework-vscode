@@ -1,3 +1,4 @@
+/** manifestHoverProvider.ts */
 import * as vscode from 'vscode';
 import fs from 'fs';
 import path from 'path';

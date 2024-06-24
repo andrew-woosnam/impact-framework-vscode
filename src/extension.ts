@@ -1,7 +1,7 @@
 /** extension.ts */
 import * as vscode from 'vscode';
 import { createManifestYamlAsync } from './createManifestCmd';
-import { createManifestHoverProvider } from './hoverProviderFactory';
+import { createManifestHoverProvider } from './manifestHoverProvider';
 import { PluginExplorer } from './pluginExplorer';
 import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
