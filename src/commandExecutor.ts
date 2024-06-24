@@ -9,9 +9,21 @@ export class CommandExecutor {
         this._outputChannel = vscode.window.createOutputChannel(channelName);
     }
 
-    public executeNpmInstall(packageName: string, cwd: string) {
+    public executeNpmInstall(packageName: string) {
+        if (!packageName) {
+            vscode.window.showErrorMessage('Package name unknown.');
+            return;
+        }
+
+        const workspaceFolders = vscode.workspace.workspaceFolders;
+        if (!workspaceFolders || workspaceFolders.length === 0) {
+            vscode.window.showErrorMessage('No workspace folder open.');
+            return;
+        }
+
+        const workspaceFolder = workspaceFolders[0].uri.fsPath;
         const cmd = `npm install ${packageName}`;
-        this._executeCommand(cmd, cwd);
+        this._executeCommand(cmd, workspaceFolder);
     }
 
     private _executeCommand(cmd: string, cwd: string) {
@@ -20,6 +32,7 @@ export class CommandExecutor {
         exec(cmd, { cwd }, (error, stdout, stderr) => {
             if (error) {
                 this._outputChannel.appendLine(`exec error: ${error}`);
+                vscode.window.showErrorMessage(`Command execution failed: ${error.message}`);
                 return;
             }
             if (stdout) { this._outputChannel.appendLine(`[${cmd}] stdout:\n${stdout}`); }

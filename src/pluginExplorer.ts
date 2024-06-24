@@ -88,21 +88,9 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
           if (plugin) {
             vscode.commands.executeCommand(message.command, plugin);
           }
-        }
-        else if (message.command === 'execNpmInstall') {
+        } else if (message.command === 'execNpmInstall') {
           try {
-            const packageName = message.args;
-            if (!packageName) {
-              console.error('No package name specified');
-              return;
-            }
-            const workspaceFolders = vscode.workspace.workspaceFolders;
-            if (!workspaceFolders || workspaceFolders.length === 0) {
-              console.error('No workspace folder open');
-              return;
-            }
-            const workspaceFolder = workspaceFolders[0].uri.fsPath;
-            this._commandExecutor.executeNpmInstall(packageName, workspaceFolder);
+            this._commandExecutor.executeNpmInstall(message.args);
           } catch (error) {
             console.error('npm install execution failed:', error);
           }
