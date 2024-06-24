@@ -9,11 +9,10 @@ export function createManifestHoverProvider(
   return {
     provideHover(document, position, _token) {
       const range = document.getWordRangeAtPosition(position);
-      if (range === null || range === undefined) {
+      if (!range) {
         return null;
       }
 
-      // Extend the range by one character to check for ":"
       const extendedRange = new vscode.Range(
         range.start,
         range.end.translate(0, 1),
@@ -30,9 +29,8 @@ export function createManifestHoverProvider(
 
 function tryGetInfoFromWord(word: string, context: vscode.ExtensionContext) {
   try {
-    const extensionPath = context.extensionPath;
     const markdownFilePath = path.join(
-      extensionPath,
+      context.extensionPath,
       `static/descriptions/${word}.md`,
     );
     const markdownContent = fs.readFileSync(markdownFilePath, 'utf8');
@@ -40,5 +38,7 @@ function tryGetInfoFromWord(word: string, context: vscode.ExtensionContext) {
     markdown.isTrusted = true;
 
     return new vscode.Hover(markdown);
-  } catch (_) {}
+  } catch {
+    return null;
+  }
 }
