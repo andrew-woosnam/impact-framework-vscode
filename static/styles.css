@@ -18,11 +18,54 @@ body {
     background-color: rgb(43, 45, 46);
 }
 
+.plugin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
 .plugin-title {
     font-family: 'Nunito', sans-serif;
     font-size: 20px;
     font-weight: 800;
-    width: 90%;
+    flex-grow: 1;
+    margin: 0;
+}
+
+.plugin-install-btn {
+    display: inline-block;
+    width: auto;
+    height: auto;
+    background-color: #1E90FF;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 10px 20px;
+    margin-left: 10px;
+    margin-right: 40px;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.plugin-install-btn:hover {
+    background-color: #1C86EE;
+    transform: translateY(-2px);
+}
+
+.plugin-install-btn:active {
+    background-color: #1874CD;
+    transform: translateY(0);
+}
+
+.plugin-install-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(30, 144, 255, 0.5);
 }
 
 .plugin-subtitle {

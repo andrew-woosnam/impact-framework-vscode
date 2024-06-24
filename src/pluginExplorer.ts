@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import axios from 'axios';
 import { Plugin } from './types';
 import { generatePluginsListHtml } from './pluginsList';
+import { exec } from 'child_process';
 
 let globalPlugins: Plugin[] = [];
 
@@ -77,12 +78,38 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
 
   private _setupMessageListener(webview: vscode.Webview) {
     webview.onDidReceiveMessage(
-      message => {
+      async message => {
         console.log('Received message:', message);
         if (message.command === 'impact-framework-vscode.showPluginDetails') {
           const plugin = globalPlugins.find(p => p.objectID === message.pluginId);
           if (plugin) {
             vscode.commands.executeCommand(message.command, plugin);
+          }
+        }
+        if (message.command === 'execCommand') {
+          try {
+            const cmdName = message.args;
+            if (!cmdName) {
+              console.error('No command specified');
+              return;
+            }
+            const workspaceFolders = vscode.workspace.workspaceFolders;
+            if (!workspaceFolders || workspaceFolders.length === 0) {
+              // TODO: prompt modal: "where would you like to install this package?"
+              console.error('No workspace folder open');
+              return;
+            }
+            const workspaceFolder = workspaceFolders[0].uri.fsPath;
+            exec(cmdName, { cwd: workspaceFolder }, (error, stdout, stderr) => {
+              if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+              }
+              if (stdout) { console.log(`[${cmdName}] stdout:\n${stdout}`); }
+              if (stderr) { console.error(`[${cmdName}] stderr:\n${stderr}`); }
+            });
+          } catch (error) {
+            console.error('Command execution failed:', error);
           }
         }
       }
