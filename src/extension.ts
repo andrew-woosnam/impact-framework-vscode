@@ -15,8 +15,29 @@ function registerCommand(
   command: string,
   callback: (...args: any[]) => any,
 ) {
-  let cmd = vscode.commands.registerCommand(command, callback);
+  const cmd = vscode.commands.registerCommand(command, callback);
   context.subscriptions.push(cmd);
+}
+
+function registerHoverProvider(
+  context: vscode.ExtensionContext,
+  selector: string,
+  provider: vscode.HoverProvider,
+) {
+  const disposable = vscode.languages.registerHoverProvider(selector, provider);
+  context.subscriptions.push(disposable);
+}
+
+function registerWebviewViewProvider(
+  context: vscode.ExtensionContext,
+  provider: vscode.WebviewViewProvider,
+) {
+  context.subscriptions.push(
+    vscode.window.registerWebviewViewProvider(
+      PluginExplorer.viewType,
+      provider,
+    ),
+  );
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -26,18 +47,10 @@ export function activate(context: vscode.ExtensionContext) {
     createManifestYamlAsync,
   );
 
-  vscode.languages.registerHoverProvider(
-    'yaml',
-    createManifestHoverProvider(context),
-  );
+  registerHoverProvider(context, 'yaml', createManifestHoverProvider(context));
 
-  const provider = new PluginExplorer(context.extensionUri);
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      PluginExplorer.viewType,
-      provider,
-    ),
-  );
+  const pluginExplorerProvider = new PluginExplorer(context.extensionUri);
+  registerWebviewViewProvider(context, pluginExplorerProvider);
 
   registerCommand(
     context,
