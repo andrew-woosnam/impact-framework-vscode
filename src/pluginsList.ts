@@ -2,7 +2,7 @@
 import * as vscode from 'vscode';
 import { Plugin } from './types.js';
 
-function extractPackageName(npmUrl?: string): string {
+export function extractPackageName(npmUrl?: string): string {
   if (!npmUrl) {
     return '';
   }
@@ -10,7 +10,7 @@ function extractPackageName(npmUrl?: string): string {
   return urlParts.pop() || urlParts.pop() || ''; // handle potential trailing slash
 }
 
-function createPluginListItem(plugin: Plugin): string {
+export function createPluginListItem(plugin: Plugin): string {
   const npmPackage = extractPackageName(plugin.npm);
   const tagsHtml = plugin.tags ? generateTagsHtml(plugin.tags) : '';
 
@@ -26,14 +26,16 @@ function createPluginListItem(plugin: Plugin): string {
     </div>`;
 }
 
-function generateTagsHtml(tags: string[]): string {
-  return `
+export function generateTagsHtml(tags: string[]): string {
+  return tags && tags.length > 0
+    ? `
     <div class="tags-container">
       ${tags.map((tag) => `<span class="green-tag">${tag}</span>`).join('')}
-    </div>`;
+    </div>`
+    : '';
 }
 
-function generateHtmlContent(
+export function generateHtmlContent(
   pluginsHtml: string,
   styleUri: vscode.Uri,
 ): string {
@@ -75,6 +77,10 @@ export function generatePluginsListHtml(
   plugins: Plugin[],
   styleUri: vscode.Uri,
 ): string {
+  if (plugins.length < 1) {
+    return `<p>No Plugins Found.</p>`;
+  }
+
   const pluginsHtml = plugins.map(createPluginListItem).join('');
   return generateHtmlContent(pluginsHtml, styleUri);
 }
