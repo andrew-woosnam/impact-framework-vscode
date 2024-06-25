@@ -6,7 +6,7 @@ import {
   generateHtmlContent,
   generatePluginsListHtml,
 } from '../../pluginsList.js';
-import vscode from 'vscode';
+import * as vscode from 'vscode';
 import { Plugin } from '../../types.js';
 
 // Constants
@@ -25,6 +25,7 @@ const GITHUB_STARS = 567;
 const STYLE_URI = 'vscode-resource:/path/to/style.css';
 const STYLE_LINK = `<link rel="stylesheet" type="text/css" href="${STYLE_URI}">`;
 const PLUGINS_HTML = '<div class="plugin-listing"></div>';
+const styleUri = vscode.Uri.parse(STYLE_URI);
 
 // Mock Plugin data
 const mockPlugin: Plugin = {
@@ -121,7 +122,6 @@ describe('generateTagsHtml', () => {
 
 describe('generateHtmlContent', () => {
   test('should generate full HTML content with plugins HTML and style URI', () => {
-    const styleUri = vscode.Uri.parse(STYLE_URI);
     const htmlContent = generateHtmlContent(PLUGINS_HTML, styleUri);
 
     expect(htmlContent).toContain(STYLE_LINK);
@@ -133,7 +133,6 @@ describe('generateHtmlContent', () => {
   });
 
   test('should include script for handling messages', () => {
-    const styleUri = vscode.Uri.parse(STYLE_URI);
     const htmlContent = generateHtmlContent(PLUGINS_HTML, styleUri);
 
     const expectedScript = `<script>
@@ -161,7 +160,6 @@ describe('generateHtmlContent', () => {
   });
 
   test('should handle empty plugins HTML', () => {
-    const styleUri = vscode.Uri.parse(STYLE_URI);
     const htmlContent = generateHtmlContent('', styleUri);
 
     expect(htmlContent).toContain(STYLE_LINK);

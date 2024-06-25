@@ -1,7 +1,7 @@
 /** src/test/__mocks__/vscode.ts */
 const vscode = {
   Uri: {
-    parse: jest.fn().mockImplementation((value: string) => ({
+    parse: jest.fn().mockImplementation((value) => ({
       path: value,
       toString: () => value,
     })),
@@ -9,4 +9,4 @@ const vscode = {
   // Mock other vscode APIs as needed
 };
 
-export default vscode;
+module.exports = vscode;
