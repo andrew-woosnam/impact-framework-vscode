@@ -1,9 +1,9 @@
 /** pluginExplorer.ts */
 import * as vscode from 'vscode';
 import axios from 'axios';
-import { Plugin } from './types.js';
-import { generatePluginsListHtml } from './pluginsList.js';
-import { CommandExecutor } from './commandExecutor.js';
+import { Plugin } from './types';
+import { generatePluginsListHtml } from './pluginsList';
+import { CommandExecutor } from './commandExecutor';
 
 let globalPlugins: Plugin[] = [];
 
