@@ -1,23 +1,60 @@
 /** src/test/__mocks__/vscode.ts */
+interface MockUri {
+  fsPath: string;
+  scheme: string;
+  authority: string;
+  path: string;
+  query: string;
+  fragment: string;
+  with: () => MockUri;
+  toJSON: () => MockUri;
+  toString: () => string;
+}
+
+const createMockUri = (path: string): MockUri => ({
+  fsPath: path,
+  scheme: '',
+  authority: '',
+  path: '',
+  query: '',
+  fragment: '',
+  with: function () {
+    return this;
+  },
+  toJSON: function () {
+    return this;
+  },
+  toString: function () {
+    return this.fsPath;
+  },
+});
+
+const createMockWorkspaceFolder = (
+  path: string,
+  name: string,
+  index: number,
+) => ({
+  uri: createMockUri(path),
+  name: name,
+  index: index,
+});
+
 const vscode = {
   Uri: {
-    parse: jest.fn().mockImplementation((value) => ({
-      path: value,
-      toString: () => value,
-    })),
+    parse: jest.fn().mockImplementation((value) => createMockUri(value)),
   },
   window: {
     createOutputChannel: jest.fn().mockReturnValue({
-      show: jest.fn() as jest.Mock<unknown, unknown[]>,
-      appendLine: jest.fn() as jest.Mock<unknown, unknown[]>,
-      logLevel: jest.fn() as jest.Mock<unknown, unknown[]>,
-      onDidChangeLogLevel: jest.fn() as jest.Mock<unknown, unknown[]>,
-      trace: jest.fn() as jest.Mock<unknown, unknown[]>,
-      debug: jest.fn() as jest.Mock<unknown, unknown[]>,
-      info: jest.fn() as jest.Mock<unknown, unknown[]>,
-      warn: jest.fn() as jest.Mock<unknown, unknown[]>,
-      error: jest.fn() as jest.Mock<unknown, unknown[]>,
-      dispose: jest.fn() as jest.Mock<unknown, unknown[]>,
+      show: jest.fn(),
+      appendLine: jest.fn(),
+      logLevel: jest.fn(),
+      onDidChangeLogLevel: jest.fn(),
+      trace: jest.fn(),
+      debug: jest.fn(),
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn(),
+      dispose: jest.fn(),
     }),
     showErrorMessage: jest.fn().mockResolvedValue(undefined),
   },
@@ -31,26 +68,13 @@ const vscode = {
     Off: 6,
   },
   workspace: {
-    get workspaceFolders() {
-      return [
-        {
-          uri: {
-            fsPath: '/path/to/workspace',
-            scheme: '',
-            authority: '',
-            path: '',
-            query: '',
-            fragment: '',
-            toJSON: function () {
-              throw new Error('Function not implemented.');
-            },
-          },
-          name: '',
-          index: 0,
-        },
-      ];
-    },
+    workspaceFolders: jest
+      .fn()
+      .mockReturnValue([
+        createMockWorkspaceFolder('/fake/path', 'my-workspace-folder', 0),
+      ]),
   },
+  createMockWorkspaceFolder,
 };
 
 module.exports = vscode;

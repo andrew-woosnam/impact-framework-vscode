@@ -4,28 +4,24 @@ import { exec, ExecOptions } from 'child_process';
 import { CommandExecutor } from '../../commandExecutor';
 
 jest.mock('child_process');
+jest.mock('vscode');
 
 describe('CommandExecutor', () => {
+  const channelName = 'TestChannel';
   let commandExecutor: CommandExecutor;
   let mockOutputChannel: vscode.LogOutputChannel;
-  const channelName = 'TestChannel';
+  let mockWorkspaceFolders: jest.Mock;
 
   beforeEach(() => {
+    commandExecutor = new CommandExecutor(channelName);
+
     mockOutputChannel = vscode.window.createOutputChannel(
       channelName,
-      undefined,
     ) as vscode.LogOutputChannel;
+    jest.spyOn(mockOutputChannel, 'appendLine');
 
-    jest
-      .spyOn(vscode.window, 'createOutputChannel')
-      .mockReturnValue(mockOutputChannel);
-    jest.spyOn(vscode.window, 'showErrorMessage').mockImplementation(() => {
-      return Promise.resolve(undefined) as Thenable<
-        vscode.MessageItem | undefined
-      >;
-    });
-
-    commandExecutor = new CommandExecutor(channelName);
+    mockWorkspaceFolders = vscode.workspace
+      .workspaceFolders as unknown as jest.Mock;
   });
 
   afterEach(() => {
@@ -45,9 +41,8 @@ describe('CommandExecutor', () => {
   });
 
   test('should not execute npm install if no workspace folder is open', () => {
-    jest
-      .spyOn(vscode.workspace, 'workspaceFolders', 'get')
-      .mockReturnValueOnce(undefined);
+    mockWorkspaceFolders.mockReturnValueOnce([]);
+
     commandExecutor.executeNpmInstall('test-package');
     expect(vscode.window.showErrorMessage).toHaveBeenCalledWith(
       'No workspace folder open.',
@@ -65,6 +60,7 @@ describe('CommandExecutor', () => {
   });
 
   test('should log command execution to output channel', () => {
+    // TODO: mock getworkspacefolder
     commandExecutor.executeNpmInstall('test-package');
     expect(mockOutputChannel.appendLine).toHaveBeenCalledWith(
       'Executing command: npm install test-package',
