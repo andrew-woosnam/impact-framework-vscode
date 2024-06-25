@@ -4,6 +4,7 @@
   "description": "GSF Impact Framework extension for VSCode",
   "icon": "static/if-logo.png",
   "version": "0.0.1",
+  "publisher": "andrewwoosnam",
   "engines": {
     "vscode": "^1.88.0"
   },
