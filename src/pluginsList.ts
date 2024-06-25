@@ -1,6 +1,6 @@
 /** pluginsList.ts */
 import * as vscode from 'vscode';
-import { Plugin } from './types';
+import { Plugin } from './types.js';
 
 function extractPackageName(npmUrl?: string): string {
   if (!npmUrl) {

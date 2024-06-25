@@ -1,12 +1,12 @@
 /** extension.ts */
 import * as vscode from 'vscode';
-import { createManifestYamlAsync } from './createManifestCmd';
-import { createManifestHoverProvider } from './manifestHoverProvider';
-import { PluginExplorer } from './pluginExplorer';
-import { showPluginDetails } from './showPluginDetailsCmd';
+import { createManifestYamlAsync } from './createManifestCmd.js';
+import { createManifestHoverProvider } from './manifestHoverProvider.js';
+import { PluginExplorer } from './pluginExplorer.js';
+import { showPluginDetails } from './showPluginDetailsCmd.js';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import { CommandCallback, Plugin } from './types';
+import { CommandCallback, Plugin } from './types.js';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 

@@ -1,6 +1,6 @@
 /** showPluginDetailsCmd.ts */
 import * as vscode from 'vscode';
-import { Plugin } from './types';
+import { Plugin } from './types.js';
 
 export async function showPluginDetails(
   plugin: Plugin,
