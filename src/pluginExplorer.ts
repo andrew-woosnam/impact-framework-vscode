@@ -77,7 +77,7 @@ export class PluginExplorer implements vscode.WebviewViewProvider {
     );
   }
 
-  private _handleFetchError(webview: vscode.Webview, error: any) {
+  private _handleFetchError(webview: vscode.Webview, error: unknown) {
     console.error('Failed to fetch plugins:', error);
     webview.html = '<p>Failed to load plugins. Please try again later.</p>';
   }

@@ -6,14 +6,14 @@ import { PluginExplorer } from './pluginExplorer';
 import { showPluginDetails } from './showPluginDetailsCmd';
 import * as dotenv from 'dotenv';
 import path from 'path';
-import { Plugin } from './types';
+import { CommandCallback, Plugin } from './types';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
 function registerCommand(
   context: vscode.ExtensionContext,
   command: string,
-  callback: (...args: any[]) => any,
+  callback: CommandCallback,
 ) {
   const cmd = vscode.commands.registerCommand(command, callback);
   context.subscriptions.push(cmd);

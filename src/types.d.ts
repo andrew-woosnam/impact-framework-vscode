@@ -10,3 +10,5 @@ export interface Plugin {
   npmDownloads: number | undefined;
   githubStars: number | undefined;
 }
+
+type CommandCallback = (plugin: Plugin) => void;
